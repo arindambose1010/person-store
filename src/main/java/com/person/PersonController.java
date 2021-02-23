@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 @CrossOrigin(origins = "*",value = "*")
 @RestController
 public class PersonController {
@@ -24,33 +26,35 @@ public class PersonController {
     private AddressService addressService;
 
     @GetMapping(value = "/persons")
-    List<Person> getallperson(){
+    List<Person> getAllPerson(){
         return  personService.findAll();
     }
 
-    @GetMapping(value = "/persons-count")
-    int getperson(){
+    @GetMapping(value = "/count")
+    int getPerson(){
         return  personService.findAll().size();
     }
     
     @GetMapping(value = "/person/{id}")
-    Person getperson(@PathVariable Integer id){
+    Person getPerson(@PathVariable Integer id){
         return  personService.findById(id).get();
     }
     @PostMapping(value = "/person")
-    String addperson(@RequestBody Person person){
+    String addPerson(@Valid  @RequestBody Person person){
+    	
         Person savedperson = personService.save(person);
-        return "SUCCESS";
+        
+    	return "SUCCESS";
     }
 
     @PutMapping(value = "/person")
-    Person updateperson(@RequestBody Person person){
+    Person updatePerson(@Valid @RequestBody Person person){
         Person updatedperson = personService.save(person);
         return updatedperson;
     }
 
     @DeleteMapping(value = "/person")
-    Map<String, String> deleteperson(@RequestParam Integer id){
+    Map<String, String> deletePerson(@RequestParam Integer id){
         Map<String, String> status = new HashMap<>();
         Optional<Person> person = personService.findById(id);
         if(person.isPresent()) {
@@ -64,24 +68,25 @@ public class PersonController {
     }
 
     @GetMapping(value = "/address/{id}")
-    Address getaddress(@PathVariable Integer id){
+    Address getAddress(@PathVariable Integer id){
         return  addressService.findById(id).get();
     }
 
     @PostMapping(value = "/address")
-    String addaddress(@RequestBody Address address){
+    String addAddress(@Valid @RequestBody Address address){
         Address addresssave = addressService.save(address);
         return "SUCCESS";
     }
 
     @PutMapping(value = "/address")
-    Address updateaddress(@RequestBody Address address){
+    Address updateAddress(@Valid @RequestBody Address address) throws Exception
+    {
         Address updatedAddress = addressService.save(address);
         return updatedAddress;
     }
 
     @DeleteMapping(value = "/address")
-    Map<String, String> deleteaddress(@RequestParam Integer id){
+    Map<String, String> deleteAddress(@RequestParam Integer id){
         Map<String, String> status = new HashMap<>();
         Optional<Address> address = addressService.findById(id);
         if(address.isPresent()) {
